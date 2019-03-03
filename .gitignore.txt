@@ -1,0 +1,4 @@
+.vs/
+.Intermeidate/
+.Save/
+.WeakenedRPG.sln
