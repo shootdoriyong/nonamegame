@@ -13,5 +13,7 @@ UCLASS()
 class WEAKENEDRPG_API AWeakenedRPGGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+		//Test
 	
 };
