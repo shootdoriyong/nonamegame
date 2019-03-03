@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\WeakenedRPG.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{B6819A24-320D-4BA5-918A-C8159A04E8D1}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\WeakenedRPG.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\WeakenedRPGEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{94E6DA6C-254F-440B-8FC6-9A719A6E83F8}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\WeakenedRPG">
+      <UniqueIdentifier>{D4BCFD2D-5C3C-4200-A78F-84AEB88D80AC}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\WeakenedRPG\WeakenedRPG.Build.cs">
+      <Filter>Source\WeakenedRPG</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\WeakenedRPG\WeakenedRPG.cpp">
+      <Filter>Source\WeakenedRPG</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\WeakenedRPG\WeakenedRPG.h">
+      <Filter>Source\WeakenedRPG</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\WeakenedRPG\WeakenedRPGGameModeBase.cpp">
+      <Filter>Source\WeakenedRPG</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\WeakenedRPG\WeakenedRPGGameModeBase.h">
+      <Filter>Source\WeakenedRPG</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
