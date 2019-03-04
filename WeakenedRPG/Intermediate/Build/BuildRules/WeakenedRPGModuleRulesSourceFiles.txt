@@ -1,3 +1,0 @@
-C:\Users\uv847\Documents\nonamegame\WeakenedRPG\Source\WeakenedRPG\WeakenedRPG.Build.cs
-C:\Users\uv847\Documents\nonamegame\WeakenedRPG\Source\WeakenedRPG.Target.cs
-C:\Users\uv847\Documents\nonamegame\WeakenedRPG\Source\WeakenedRPGEditor.Target.cs
