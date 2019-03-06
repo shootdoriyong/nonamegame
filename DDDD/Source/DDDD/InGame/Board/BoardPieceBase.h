@@ -6,7 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BoardPieceBase.generated.h"
 
-class UBoxComponent;
+class UStaticMeshComponent;
+class UMaterial;
 
 UCLASS()
 class DDDD_API ABoardPieceBase : public AActor
@@ -25,12 +26,22 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void PostInitializeComponents() override;
 public:
 	void					Init(int32 in_BoardIndex);
 	int32					GetBoardIndex();
+
+	float					GetMeshSizeX();
+	float					GetMeshSizeY();
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Board")
+	UStaticMeshComponent*	_pBoardPieceSM;
+
+	UPROPERTY()
+	UMaterial*				_pMaterial;
 private:
 	int32					_BoardIndex;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UBoxComponent*			_pBoardPieceSM; //Board 조각 StaticMesh Comp // 큐브
+
 };
