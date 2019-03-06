@@ -9,6 +9,12 @@
 /**
  * 
  */
+
+#define BOARD_X	10
+#define BOARD_Y 10
+
+class UBoardCtr;
+
 UCLASS()
 class DDDD_API UInGameMng : public UObject
 {
@@ -22,6 +28,15 @@ public:
 	//인게임으로 넘어올 때 호출
 	void					Enter();
 
+	//게임 결과 받고 로비로 넘어 갈 때
+	void					Exit();
+
 	//실제 게임 시작 시 호출
 	void					StartGame();
+
+	UBoardCtr*				GetBoardCtr();
+
+private:
+	UPROPERTY()
+	UBoardCtr*				_pBoradCtr;
 };
