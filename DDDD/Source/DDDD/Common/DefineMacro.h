@@ -3,7 +3,6 @@
 #include "MainFramework.h"
 #include "Engine.h"
 
-//#include "TRDefineMacro.generated.h"
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p)   { if(p) { delete (p);   (p)=NULL; } }
 #endif
