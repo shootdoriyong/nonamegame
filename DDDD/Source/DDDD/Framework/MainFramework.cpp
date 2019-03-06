@@ -26,13 +26,6 @@ void UMainFramework::Init(UGameInstance* in_GameInstance)
 	_pLobbyMng->Init();
 	_pInGameMng->Init();
 	_pDataMng->Init();
-
-	//19.03.05 guhyun 
-	//게임 시작 시점 정하기 전에 에디터 키면 바로 InGame으로 가자
-	if (IS_VALID(_pInGameMng))
-	{
-		_pInGameMng->Enter();
-	}
 }
 
 void UMainFramework::UpdateMainFramework(float in_DeltaSeconds)

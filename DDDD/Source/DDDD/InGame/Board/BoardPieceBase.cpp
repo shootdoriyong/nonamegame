@@ -66,3 +66,28 @@ int32 ABoardPieceBase::GetBoardIndex()
 	return _BoardIndex;
 }
 
+float ABoardPieceBase::GetMeshSizeX()
+{
+	float Size = 0.0f;
+
+	if (_pBoardPieceSM)
+	{
+		return _pBoardPieceSM->GetStaticMesh()->GetBounds().GetBox().GetSize().X;
+		//_pBoardPieceSM->GetStaticMesh()->GetBouns().GetBox().GetSize().
+	}
+
+	return Size;
+}
+
+float ABoardPieceBase::GetMeshSizeY()
+{
+	float Size = 0.0f;
+
+	if (_pBoardPieceSM)
+	{
+		return _pBoardPieceSM->GetStaticMesh()->GetBounds().GetBox().GetSize().Y;
+		//_pBoardPieceSM->GetStaticMesh()->GetBouns().GetBox().GetSize().
+	}
+
+	return Size;
+}

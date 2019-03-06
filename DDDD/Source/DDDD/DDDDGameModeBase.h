@@ -13,5 +13,10 @@ UCLASS()
 class DDDD_API ADDDDGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	ADDDDGameModeBase(const FObjectInitializer& ObjectInitializer);
+
+public:
+	void				BeginPlay() override;
 };

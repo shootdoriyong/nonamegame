@@ -33,9 +33,9 @@ void UBoard::CreateBoard(bool in_bIsMine, int32 in_X, int32 in_Y)
 
 	int32 BoardIndex = 0;
 
-	for (int32 i = 0; i < in_X; i++)
+	for (int32 i = 0; i < in_Y; i++)
 	{
-		for (int32 j = 0; j < in_Y; j++)
+		for (int32 j = 0; j < in_X; j++)
 		{
 			//일단 Normal Board 조각으로만 Board 구성하자
 			UClass* pClass = nullptr;
@@ -46,21 +46,25 @@ void UBoard::CreateBoard(bool in_bIsMine, int32 in_X, int32 in_Y)
 			if (pClass != nullptr)
 			{
 				//내 보드 , 적 보드 생성위치 세팅. 보드 조각 크기 등등 변수 있어 일단 임의 값 넣고
-				FVector Loc = FVector(0, 0, 0);
-				FRotator Rot = FRotator(0, 0, 0);
 
-				if (_bIsMineBorad == false)
-				{
-					Loc += FVector(0, 0, 0);
-				}
-
-				FTransform Tr(Rot, Loc, FVector::OneVector);
-
-				ABoardPieceBase* pBoardPiece = Cast<ABoardPieceBase>(GET_MAINFRAMEWORK()->GetGameInstance()->GetWorld()->SpawnActor(pClass, &Tr));
+				//내 보드 좌하단 부터 시작. 0, 0, 0을 중점으로. 생성(인덱스) 순서 = 좌하단 -> 우상단 순으로
+				//상대 보드는 내 보드 사이즈보고 위치 맞춰 줌
+				ABoardPieceBase* pBoardPiece = Cast<ABoardPieceBase>(GET_MAINFRAMEWORK()->GetGameInstance()->GetWorld()->SpawnActor(pClass));
 				if (pBoardPiece)
 				{
+					FVector Location = FVector(pBoardPiece->GetMeshSizeX() * j, pBoardPiece->GetMeshSizeY() * i, 0.0f); //보드 높이값 0으로. 혹시 아닐수 있으면 변경
+
+					//상대 보드는 내 보드 상단에 배치
+					if (_bIsMineBorad == false)
+					{
+						Location += FVector(0, pBoardPiece->GetMeshSizeY() * in_Y + 500, 0);
+					}
+
+					pBoardPiece->SetActorLocation(Location);
+
 					pBoardPiece->Init(BoardIndex++);
 					_BoardPiceList.Add(pBoardPiece);
+
 				}
 			}
 		}

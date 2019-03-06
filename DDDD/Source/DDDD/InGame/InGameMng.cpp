@@ -3,6 +3,7 @@
 #include "InGameMng.h"
 #include "BoardCtr.h"
 #include "DefineMacro.h"
+#include "DDDDPlayerController.h"
 
 void UInGameMng::Init()
 {
@@ -28,9 +29,12 @@ void UInGameMng::Shutdown()
 
 void UInGameMng::Enter()
 {
-	//UE_LOG(LogClass, Warning, TEXT("Enter in InGameMng Class"));
-
 	//시작 전 해줘야 할 것들
+	ADDDDPlayerController* pDDDDPC = Cast<ADDDDPlayerController>(GET_MAINFRAMEWORK()->GetGameInstance()->GetWorld()->GetFirstPlayerController());
+	if (IS_VALID(pDDDDPC))
+	{
+		pDDDDPC->PossessToInGamePawn();
+	}
 
 	//대기 시간이 있다면 그 이후에
 	StartGame();
@@ -38,8 +42,6 @@ void UInGameMng::Enter()
 
 void UInGameMng::StartGame()
 {
-	//UE_LOG(LogClass, Warning, TEXT("StartGame in InGameMng Class"));
-
 	_pBoradCtr = NewObject<UBoardCtr>();
 	_pBoradCtr->Init();
 
