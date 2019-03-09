@@ -24,7 +24,7 @@ ABoardPieceNormal::ABoardPieceNormal()
 		_pMaterial = CubeMatAsset.Object;
 
 		RootComponent = _pBoardPieceSM;
-		SetActorEnableCollision(false);
+		//SetActorEnableCollision(false);
 	}
 }
 
