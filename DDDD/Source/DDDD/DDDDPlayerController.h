@@ -19,12 +19,15 @@ class DDDD_API ADDDDPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public:
-	void					BeginPlay() override;
-
+	virtual void			BeginPlay() override;
+	// Called every frame
+	virtual void			Tick(float DeltaTime) override;
 public:
 	void					CreatePawns();
 	void					PossessToLobbyPawn();
 	void					PossessToInGamePawn();	
+
+	FVector					GetMousePosInWorld();
 private:
 	UPROPERTY()
 	ALobbyPawn*				_pLobbyPawn;

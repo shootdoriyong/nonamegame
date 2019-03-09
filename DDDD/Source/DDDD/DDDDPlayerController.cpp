@@ -11,8 +11,15 @@ void ADDDDPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	bShowMouseCursor = true;
-	
+	bEnableClickEvents = true;
+	bEnableMouseOverEvents = true;
+
 	CreatePawns();
+}
+
+void ADDDDPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }
 
 void ADDDDPlayerController::CreatePawns()

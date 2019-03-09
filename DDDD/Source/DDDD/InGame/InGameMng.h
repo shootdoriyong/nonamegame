@@ -14,6 +14,7 @@
 #define BOARD_Y 10
 
 class UBoardCtr;
+class UObstacleCtr;
 
 UCLASS()
 class DDDD_API UInGameMng : public UObject
@@ -35,8 +36,17 @@ public:
 	void					StartGame();
 
 	UBoardCtr*				GetBoardCtr();
+	UObstacleCtr*			GetObstacleCtr();
 
+	void					SetIsMyTurn(bool in_bIsMyTurn);
+	bool					GetIsMyTurn();
 private:
 	UPROPERTY()
 	UBoardCtr*				_pBoradCtr;
+
+	UPROPERTY()
+	UObstacleCtr*			_pObstacleCtr;
+
+private:
+	bool					_bIsMyTurn;
 };

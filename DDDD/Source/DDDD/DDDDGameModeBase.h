@@ -18,5 +18,5 @@ public:
 	ADDDDGameModeBase(const FObjectInitializer& ObjectInitializer);
 
 public:
-	void				BeginPlay() override;
+	virtual	void				BeginPlay() override;
 };

@@ -26,6 +26,7 @@ public class DDDD : ModuleRules
         PublicIncludePaths.Add(kProjectPath + "/UI");
         PublicIncludePaths.Add(kProjectPath + "/InGame");
         PublicIncludePaths.Add(kProjectPath + "/InGame/Board");
+        PublicIncludePaths.Add(kProjectPath + "/InGame/Obstacle");
         PublicIncludePaths.Add(kProjectPath + "/Lobby");
         PublicIncludePaths.Add(kProjectPath + "/Data");
         PublicIncludePaths.Add(kProjectPath + "/Common");

@@ -3,6 +3,7 @@
 #include "BoardPieceBase.h"
 #include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Board.h"
 #include "Materials/MaterialInstanceDynamic.h"
 
 // Sets default values
@@ -13,22 +14,6 @@ ABoardPieceBase::ABoardPieceBase()
 
 	_BoardIndex = -1;
 	_pMaterial = nullptr;
-
-	//보드 조각 별 머터리얼이나 메쉬가 다르다면 각각 BP에서 변수로 받아서 BeginPlay에서 세팅 해주자
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
-	static ConstructorHelpers::FObjectFinder<UMaterial> CubeMatAsset(TEXT("Material'/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial'"));
-
-	if (CubeMeshAsset.Succeeded())
-	{
-		PrimaryActorTick.bCanEverTick = true;
-		_pBoardPieceSM = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CubeVisualComponent"));
-		_pBoardPieceSM->SetStaticMesh(CubeMeshAsset.Object);
-
-		_pMaterial = CubeMatAsset.Object;
-		
-		RootComponent = _pBoardPieceSM;
-		SetActorEnableCollision(false);
-	}
 }
 
 // Called when the game starts or when spawned
@@ -56,8 +41,9 @@ void ABoardPieceBase::PostInitializeComponents()
 	}
 }
 
-void ABoardPieceBase::Init(int32 in_BoardIndex)
+void ABoardPieceBase::Init(UBoard* in_pOwner, int32 in_BoardIndex)
 {
+	_pOwnerBoard = in_pOwner;
 	_BoardIndex = in_BoardIndex;
 }
 
@@ -66,14 +52,28 @@ int32 ABoardPieceBase::GetBoardIndex()
 	return _BoardIndex;
 }
 
+float ABoardPieceBase::GetSizeX()
+{
+	return GetMeshSizeX() * GetActorScale3D().X;
+}
+
+float ABoardPieceBase::GetSizeY()
+{
+	return GetMeshSizeY() * GetActorScale3D().Y;
+}
+
+float ABoardPieceBase::GetSizeZ()
+{
+	return GetMeshSizeZ() * GetActorScale3D().Z;
+}
+
 float ABoardPieceBase::GetMeshSizeX()
 {
 	float Size = 0.0f;
 
 	if (_pBoardPieceSM)
 	{
-		return _pBoardPieceSM->GetStaticMesh()->GetBounds().GetBox().GetSize().X;
-		//_pBoardPieceSM->GetStaticMesh()->GetBouns().GetBox().GetSize().
+		Size = _pBoardPieceSM->GetStaticMesh()->GetBounds().GetBox().GetSize().X;
 	}
 
 	return Size;
@@ -85,9 +85,25 @@ float ABoardPieceBase::GetMeshSizeY()
 
 	if (_pBoardPieceSM)
 	{
-		return _pBoardPieceSM->GetStaticMesh()->GetBounds().GetBox().GetSize().Y;
-		//_pBoardPieceSM->GetStaticMesh()->GetBouns().GetBox().GetSize().
+		Size = _pBoardPieceSM->GetStaticMesh()->GetBounds().GetBox().GetSize().Y;
 	}
 
 	return Size;
+}
+
+float ABoardPieceBase::GetMeshSizeZ()
+{
+	float Size = 0.0f;
+
+	if (_pBoardPieceSM)
+	{
+		Size = _pBoardPieceSM->GetStaticMesh()->GetBounds().GetBox().GetSize().Z;
+	}
+
+	return Size;
+}
+
+UBoard* ABoardPieceBase::GetOwnerBoard()
+{
+	return _pOwnerBoard;
 }

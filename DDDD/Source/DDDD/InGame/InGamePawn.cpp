@@ -3,6 +3,7 @@
 #include "InGamePawn.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "BoardPieceBase.h"
 
 // Sets default values
 AInGamePawn::AInGamePawn()
@@ -35,7 +36,6 @@ void AInGamePawn::BeginPlay()
 void AInGamePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input

@@ -4,40 +4,46 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BoardPieceBase.generated.h"
+#include "InGameDefine.h"
+#include "ObstaclePieceBase.generated.h"
 
 class UStaticMeshComponent;
 class UMaterial;
-class UBoard;
+
 UCLASS()
-class DDDD_API ABoardPieceBase : public AActor
+class DDDD_API AObstaclePieceBase : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
-	ABoardPieceBase();
+	AObstaclePieceBase();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void PostInitializeComponents() override;
+
 public:
-	void					Init(UBoard* in_pOwner, int32 in_BoardIndex);
-	int32					GetBoardIndex();
+	void					Init(int32 in_ObstaclePieceIndex);
+
 	float					GetSizeX();
 	float					GetSizeY();
 	float					GetSizeZ();
 
-	UBoard*					GetOwnerBoard();
+	int32					GetObstaclePieceIndex();
+
+	void					SetState(EOBSTACLE_PIECE_STATE_TYPE in_eObstaclePieceState);
+	EOBSTACLE_PIECE_STATE_TYPE	GetState();
+
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Board")
-	UStaticMeshComponent*	_pBoardPieceSM;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Obstacle")
+	UStaticMeshComponent*	_pObstaclePieceSM;
 
 	UPROPERTY()
 	UMaterial*				_pMaterial;
@@ -47,11 +53,14 @@ protected:
 	float					GetMeshSizeY();
 	float					GetMeshSizeZ();
 
+	void					SetMaterialByState(EOBSTACLE_PIECE_STATE_TYPE in_eObstaclePieceState);
+
+
 protected:
-	//int32					_BoardIndex;
-	UBoard*					_pOwnerBoard;
+	//int32					_ObstaclePieceIndex;
+	EOBSTACLE_PIECE_STATE_TYPE	_eObstaclePieceState;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32					_BoardIndex;		//확인용
+	int32					_ObstaclePieceIndex;		//확인용
 };
