@@ -7,7 +7,7 @@
 
 void UBoard::Init()
 {
-	_BoardPiceList.Empty();
+	_BoardPieceMap.Empty();
 
 	_bIsMineBorad = false;
 }
@@ -19,12 +19,12 @@ void UBoard::Update(float in_DeltaTime)
 
 void UBoard::Shutdown()
 {
-	for (auto Iter = _BoardPiceList.CreateIterator(); Iter; ++Iter)
+	for (auto Iter = _BoardPieceMap.CreateIterator(); Iter; ++Iter)
 	{
-		(*Iter)->Destroy();
+		Iter->Value->Destroy();
 	}
 
-	_BoardPiceList.Empty();
+	_BoardPieceMap.Empty();
 }
 
 void UBoard::CreateBoard(bool in_bIsMine, int32 in_X, int32 in_Y)
@@ -33,9 +33,9 @@ void UBoard::CreateBoard(bool in_bIsMine, int32 in_X, int32 in_Y)
 
 	int32 BoardIndex = 0;
 
-	for (int32 i = 0; i < in_Y; i++)
+	for (int32 i = 0; i < in_X; i++)
 	{
-		for (int32 j = 0; j < in_X; j++)
+		for (int32 j = 0; j < in_Y; j++)
 		{
 			//일단 Normal Board 조각으로만 Board 구성하자
 			UClass* pClass = nullptr;
@@ -56,7 +56,7 @@ void UBoard::CreateBoard(bool in_bIsMine, int32 in_X, int32 in_Y)
 				ABoardPieceBase* pBoardPiece = Cast<ABoardPieceBase>(GET_MAINFRAMEWORK()->GetGameInstance()->GetWorld()->SpawnActor(pClass));
 				if (pBoardPiece)
 				{
-					FVector Location = FVector(pBoardPiece->GetSizeX() * j, pBoardPiece->GetSizeY() * i * -1, 0.0f); //보드 높이값 0으로. 혹시 아닐수 있으면 변경
+					FVector Location = FVector(pBoardPiece->GetSizeX() * i * -1, pBoardPiece->GetSizeY() * j, 0.0f); //보드 높이값 0으로. 혹시 아닐수 있으면 변경
 
 					//상대 보드는 내 보드 상단에 배치
 					if (_bIsMineBorad == false)
@@ -66,11 +66,42 @@ void UBoard::CreateBoard(bool in_bIsMine, int32 in_X, int32 in_Y)
 
 					pBoardPiece->SetActorLocation(Location);
 
+					_BoardPieceMap.Add(BoardIndex, pBoardPiece);
 					pBoardPiece->Init(this, BoardIndex++);
-					_BoardPiceList.Add(pBoardPiece);
-
 				}
 			}
 		}
 	}
+}
+
+bool UBoard::IsMineBoard()
+{
+	return _bIsMineBorad;
+}
+
+
+bool UBoard::GetBoardPieceState(int32 in_BardPieceIndex, EBOARD_PIECE_STATE_TYPE& out_eBoardPieceState)
+{
+	auto FindIter = _BoardPieceMap.Find(in_BardPieceIndex);
+
+	if (FindIter)
+	{
+		out_eBoardPieceState = (*FindIter)->GetState();
+		return true;
+	}
+	
+	return false;
+}
+
+ bool UBoard::SetBoardPieceState(int32 in_BardPieceIndex, EBOARD_PIECE_STATE_TYPE in_eBoardPieceState)
+{
+	 auto FindIter = _BoardPieceMap.Find(in_BardPieceIndex);
+
+	 if (FindIter)
+	 {
+		 (*FindIter)->SetState(in_eBoardPieceState);
+		 return true;
+	 }
+
+	 return false;
 }

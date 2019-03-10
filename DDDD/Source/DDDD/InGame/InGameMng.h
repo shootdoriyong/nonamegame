@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "InGameDefine.h"
 #include "InGameMng.generated.h"
 
 /**

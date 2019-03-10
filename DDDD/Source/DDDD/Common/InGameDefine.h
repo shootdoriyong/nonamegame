@@ -50,3 +50,14 @@ enum class EOBSTACLE_PIECE_STATE_TYPE : uint8
 
 	MAX_SIZE,
 };
+
+UENUM(Blueprintable)
+enum class EBOARD_PIECE_STATE_TYPE : uint8
+{
+	NONE,
+
+	UNDER_PAWN,
+	UNDER_OBSTACLE,
+
+	MAX_SIZE,
+};

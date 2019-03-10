@@ -3,8 +3,10 @@
 #include "InGamePawn.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "DefineMacro.h"
+#include "InGameMng.h"
 #include "BoardPieceBase.h"
-
+#include "ObstacleCtr.h"
 // Sets default values
 AInGamePawn::AInGamePawn()
 {
@@ -55,12 +57,16 @@ void AInGamePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 void AInGamePawn::MouseLeftPressed()
 {
-	UE_LOG(LogClass, Warning, TEXT("MouseLeftPressed"));
+	//UE_LOG(LogClass, Warning, TEXT("MouseLeftPressed"));
+	if (GET_INGAME_MANAGER()->GetObstacleCtr()->IsAvailabilityArrangement())
+	{
+		GET_INGAME_MANAGER()->GetObstacleCtr()->ArrangementObstacle();
+	}
 }
 
 void AInGamePawn::MouseLeftReleased()
 {
-	UE_LOG(LogClass, Warning, TEXT("MouseLeftReleased"));
+	//UE_LOG(LogClass, Warning, TEXT("MouseLeftReleased"));
 }
 
 void AInGamePawn::MoveForward(float in_AxisValue)

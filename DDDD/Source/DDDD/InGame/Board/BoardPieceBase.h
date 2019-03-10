@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "InGameDefine.h"
 #include "BoardPieceBase.generated.h"
 
 class UStaticMeshComponent;
@@ -42,11 +43,13 @@ public:
 	UPROPERTY()
 	UMaterial*				_pMaterial;
 
+	EBOARD_PIECE_STATE_TYPE	GetState();
+	void					SetState(EBOARD_PIECE_STATE_TYPE in_eState);
 protected:
 	float					GetMeshSizeX();
 	float					GetMeshSizeY();
 	float					GetMeshSizeZ();
-
+	EBOARD_PIECE_STATE_TYPE _eBoardPieceState;
 protected:
 	//int32					_BoardIndex;
 	UBoard*					_pOwnerBoard;

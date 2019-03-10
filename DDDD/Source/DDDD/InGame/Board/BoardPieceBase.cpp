@@ -14,6 +14,8 @@ ABoardPieceBase::ABoardPieceBase()
 
 	_BoardIndex = -1;
 	_pMaterial = nullptr;
+
+	_eBoardPieceState = EBOARD_PIECE_STATE_TYPE::NONE;
 }
 
 // Called when the game starts or when spawned
@@ -106,4 +108,14 @@ float ABoardPieceBase::GetMeshSizeZ()
 UBoard* ABoardPieceBase::GetOwnerBoard()
 {
 	return _pOwnerBoard;
+}
+
+EBOARD_PIECE_STATE_TYPE ABoardPieceBase::GetState()
+{
+	return _eBoardPieceState;
+}
+
+void ABoardPieceBase::SetState(EBOARD_PIECE_STATE_TYPE in_eState)
+{
+	_eBoardPieceState = in_eState;
 }

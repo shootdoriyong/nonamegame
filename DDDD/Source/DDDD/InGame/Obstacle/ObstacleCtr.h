@@ -30,6 +30,8 @@ public:
 	EOBSTACLE_TYPE			GetSelectedCurrentObstacleType();
 
 	void					CreateObstacle();
+	void					ArrangementObstacle();
+	bool					IsAvailabilityArrangement();
 private:
 	//현재 선택 된 장애물 타입. (장애물 타입은 선택하는게아니라 순차적으로 고정 된 타입을 배정받는다고한다)
 	EOBSTACLE_TYPE			_eCurrentObstacleType;

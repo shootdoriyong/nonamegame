@@ -80,7 +80,7 @@ void UObstacleCtr::SelectedNextObstacle()
 	_eCurrentObstacleType = _ObstacleTypeList[0];
 
 	//장애물 목록에 하나 더 추가
-	EOBSTACLE_TYPE eLastObstacleType = _ObstacleTypeList[COUNT_SHOW_OBSTACLE - 1];
+	EOBSTACLE_TYPE eLastObstacleType = _ObstacleTypeList[_ObstacleTypeList.Num() - 1];
 
 	if ((int32)eLastObstacleType + 1 == (int32)EOBSTACLE_TYPE::MAX_SIZE)
 	{
@@ -110,4 +110,27 @@ void UObstacleCtr::CreateObstacle()
 	_pCurrentObstacle->CreateObstacle(_eCurrentObstacleType);
 
 	_pObstacleList.Add(_CurrentObstacleArrangementCount, _pCurrentObstacle);
+}
+
+void UObstacleCtr::ArrangementObstacle()
+{
+	if (IS_VALID(_pCurrentObstacle))
+	{
+		_pCurrentObstacle->Arrangement();
+		_pCurrentObstacle = nullptr;
+
+		//일단 배치하면 바로 다음 장애물 생성
+		SelectedNextObstacle();
+		CreateObstacle();
+	}
+}
+
+bool UObstacleCtr::IsAvailabilityArrangement()
+{
+	if (IS_VALID(_pCurrentObstacle))
+	{
+		return _pCurrentObstacle->IsAvailabilityArrangement();
+	}
+
+	return false;
 }

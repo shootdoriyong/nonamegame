@@ -13,6 +13,7 @@
 
 class AObstaclePieceBase;
 class AObstaclePieceGroup;
+class ABoardPieceBase;
 UCLASS()
 class DDDD_API UObstacle : public UObject
 {
@@ -25,12 +26,16 @@ public:
 
 	void					CreateObstacle(EOBSTACLE_TYPE in_eObstacleType);
 	EOBSTACLE_STATE_TYPE	GetObstacleStateType();
+
+	void					Arrangement();
+	bool					IsAvailabilityArrangement();
 private:
 	int32					GetCeneterPieceIndex(EOBSTACLE_TYPE in_eObstacleType);
 	AObstaclePieceGroup*	CreateObstacleGroupActor();
+	void					UpdateObstaclePieceState();
 private:
 	EOBSTACLE_TYPE			_eObstacleType;
-	EOBSTACLE_STATE_TYPE	_ObstacleStateType;
+	EOBSTACLE_STATE_TYPE	_eObstacleStateType;
 	TMap<EOBSTACLE_TYPE, TArray<FString>> _ObstacleInitInfoMap;
 
 	UPROPERTY()
@@ -40,4 +45,6 @@ private:
 
 	UPROPERTY()
 	AActor*					_pObstacleGroupingActor;
+
+	ABoardPieceBase*		_pUnderCursorBoard;
 };

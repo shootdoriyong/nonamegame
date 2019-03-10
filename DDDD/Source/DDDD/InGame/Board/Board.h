@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "InGameDefine.h"
 #include "Board.generated.h"
 
 /**
@@ -23,11 +24,13 @@ public:
 	void					Shutdown();
 
 	void					CreateBoard(bool in_bIsMine, int32 in_X, int32 in_Y);
+	bool					IsMineBoard();
 
+	bool					GetBoardPieceState(int32 in_BardPieceIndex, EBOARD_PIECE_STATE_TYPE& out_eBoardPieceState);
+	bool					SetBoardPieceState(int32 in_BardPieceIndex, EBOARD_PIECE_STATE_TYPE in_eBoardPieceState);
 private:
-	//보드 조각 인덱스랑 맵으로 저장하는게 편할수도. 일단 조각에 조각 인덱스 넣을거라 어레이로 쓰자
 	UPROPERTY()
-	TArray<ABoardPieceBase*> _BoardPiceList;
+	TMap<int32, ABoardPieceBase*> _BoardPieceMap;
 
 private:
 	bool					_bIsMineBorad;

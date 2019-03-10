@@ -102,7 +102,7 @@ int32 AObstaclePieceBase::GetObstaclePieceIndex()
 
 void AObstaclePieceBase::SetState(EOBSTACLE_PIECE_STATE_TYPE in_eObstaclePieceState)
 {
-	if (_eObstaclePieceState != in_eObstaclePieceState)
+	//if (_eObstaclePieceState != in_eObstaclePieceState)
 	{
 		_eObstaclePieceState = in_eObstaclePieceState;
 
@@ -132,7 +132,8 @@ void AObstaclePieceBase::SetMaterialByState(EOBSTACLE_PIECE_STATE_TYPE in_eObsta
 			if (_pObstaclePieceSM )
 			{
 				UMaterialInstanceDynamic* pMID = UMaterialInstanceDynamic::Create(_pMaterial, nullptr);
-				pMID->SetScalarParameterValue(FName(TEXT("Alpha")), 0.5f);
+				pMID->SetScalarParameterValue(FName(TEXT("Alpha")), 0.8f);
+				//pMID->SetVectorParameterValue(FName(TEXT("Color")), FLinearColor::Gray);
 				_pObstaclePieceSM->SetMaterial(0, pMID);
 			}
 		}
@@ -142,7 +143,7 @@ void AObstaclePieceBase::SetMaterialByState(EOBSTACLE_PIECE_STATE_TYPE in_eObsta
 			{
 				UMaterialInstanceDynamic* pMID = UMaterialInstanceDynamic::Create(_pMaterial, nullptr);
 				pMID->SetVectorParameterValue(FName(TEXT("Color")), FLinearColor::Red);
-				pMID->SetScalarParameterValue(FName(TEXT("Alpha")), 0.5f);
+				pMID->SetScalarParameterValue(FName(TEXT("Alpha")), 0.8f);
 				_pObstaclePieceSM->SetMaterial(0, pMID);
 			}
 		}
