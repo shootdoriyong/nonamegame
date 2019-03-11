@@ -28,6 +28,8 @@ public:
 
 	bool					GetBoardPieceState(int32 in_BardPieceIndex, EBOARD_PIECE_STATE_TYPE& out_eBoardPieceState);
 	bool					SetBoardPieceState(int32 in_BardPieceIndex, EBOARD_PIECE_STATE_TYPE in_eBoardPieceState);
+
+	ABoardPieceBase*		GetBoardPiece(int32 in_BaordPieceIndex);
 private:
 	UPROPERTY()
 	TMap<int32, ABoardPieceBase*> _BoardPieceMap;

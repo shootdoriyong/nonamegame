@@ -105,3 +105,10 @@ bool UBoard::GetBoardPieceState(int32 in_BardPieceIndex, EBOARD_PIECE_STATE_TYPE
 
 	 return false;
 }
+
+ ABoardPieceBase* UBoard::GetBoardPiece(int32 in_BaordPieceIndex)
+ {
+	 auto FindIter = _BoardPieceMap.Find(in_BaordPieceIndex);
+
+	 return *FindIter;
+ }

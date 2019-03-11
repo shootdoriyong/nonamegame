@@ -45,7 +45,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Obstacle")
 	UStaticMeshComponent*	_pObstaclePieceSM;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Obstacle")
+	UMaterial*				_pPreviewMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Obstacle")
 	UMaterial*				_pMaterial;
 
 protected:

@@ -10,8 +10,6 @@ AObstaclePieceBase::AObstaclePieceBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	_pMaterial = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -32,9 +30,10 @@ void AObstaclePieceBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	if (_pObstaclePieceSM && _pMaterial)
+	if (_pObstaclePieceSM && _pPreviewMaterial)
 	{
-		UMaterialInstanceDynamic* pMID = UMaterialInstanceDynamic::Create(_pMaterial, nullptr);
+		UMaterialInstanceDynamic* pMID = UMaterialInstanceDynamic::Create(_pPreviewMaterial, nullptr);
+		pMID->SetVectorParameterValue(FName(TEXT("Color")), FLinearColor::White);
 		_pObstaclePieceSM->SetMaterial(0, pMID);
 	}
 }
@@ -117,6 +116,9 @@ EOBSTACLE_PIECE_STATE_TYPE AObstaclePieceBase::GetState()
 
 void AObstaclePieceBase::SetMaterialByState(EOBSTACLE_PIECE_STATE_TYPE in_eObstaclePieceState)
 {
+	//머터리얼 빠져있으면 넣자.
+	check(_pPreviewMaterial && _pMaterial);
+
 	if (_eObstaclePieceState == EOBSTACLE_PIECE_STATE_TYPE::HIDDEN)
 	{
 		if(bHidden == false)
@@ -131,19 +133,17 @@ void AObstaclePieceBase::SetMaterialByState(EOBSTACLE_PIECE_STATE_TYPE in_eObsta
 		{
 			if (_pObstaclePieceSM )
 			{
-				UMaterialInstanceDynamic* pMID = UMaterialInstanceDynamic::Create(_pMaterial, nullptr);
-				pMID->SetScalarParameterValue(FName(TEXT("Alpha")), 0.8f);
-				//pMID->SetVectorParameterValue(FName(TEXT("Color")), FLinearColor::Gray);
+				UMaterialInstanceDynamic* pMID = UMaterialInstanceDynamic::Create(_pPreviewMaterial, nullptr);
+				pMID->SetVectorParameterValue(FName(TEXT("Color")), FLinearColor::White);
 				_pObstaclePieceSM->SetMaterial(0, pMID);
 			}
 		}
-		else if (_eObstaclePieceState == EOBSTACLE_PIECE_STATE_TYPE::PREVIEW_FAIL)
+		else if (_eObstaclePieceState == EOBSTACLE_PIECE_STATE_TYPE::ARRANGEMENT_IMPOSSIBLE)
 		{
 			if (_pObstaclePieceSM)
 			{
-				UMaterialInstanceDynamic* pMID = UMaterialInstanceDynamic::Create(_pMaterial, nullptr);
+				UMaterialInstanceDynamic* pMID = UMaterialInstanceDynamic::Create(_pPreviewMaterial, nullptr);
 				pMID->SetVectorParameterValue(FName(TEXT("Color")), FLinearColor::Red);
-				pMID->SetScalarParameterValue(FName(TEXT("Alpha")), 0.8f);
 				_pObstaclePieceSM->SetMaterial(0, pMID);
 			}
 		}
@@ -152,8 +152,6 @@ void AObstaclePieceBase::SetMaterialByState(EOBSTACLE_PIECE_STATE_TYPE in_eObsta
 			if (_pObstaclePieceSM)
 			{
 				UMaterialInstanceDynamic* pMID = UMaterialInstanceDynamic::Create(_pMaterial, nullptr);
-				pMID->SetVectorParameterValue(FName(TEXT("Color")), FLinearColor::White);
-				pMID->SetScalarParameterValue(FName(TEXT("Alpha")), 1.0f);
 				_pObstaclePieceSM->SetMaterial(0, pMID);
 			}
 		}

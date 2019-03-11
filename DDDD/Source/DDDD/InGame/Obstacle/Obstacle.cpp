@@ -261,7 +261,12 @@ void UObstacle::Arrangement()
 	if (!IS_VALID(_pUnderCursorBoard))
 		return;
 
-	_eObstacleStateType = EOBSTACLE_STATE_TYPE::ARRANGEMENT;
+	int32 UnderCursorBoardIndex = _pUnderCursorBoard->GetBoardIndex();
+	int32 CenterObstaclePieceIndex = GetCeneterPieceIndex(_eObstacleType);
+
+	//좌상단부터 우하단 순으로 장애물을 그릴 때 2차원 배열 구조체 상의 해당 조각 인덱스의 위치 인덱스 값.
+	//여기서 4는 장애물이 4x4로 이루어져있어서.
+	FVector2D CenterObstaclePieceIndexInfo = FVector2D(CenterObstaclePieceIndex / 4, CenterObstaclePieceIndex % 4);
 
 	TArray<AActor*> ObstaclePieceList;
 	_pObstacleGroupingActor->GetAttachedActors(ObstaclePieceList);
@@ -273,29 +278,19 @@ void UObstacle::Arrangement()
 		{
 			pOBP->SetState(EOBSTACLE_PIECE_STATE_TYPE::ARRANGEMENT);
 
-			//이미 이 함수들어온거 자체가 배치가 가능 한 상태라는 것이다.
-			FHitResult Hit(ForceInit);
-			FCollisionQueryParams Params = FCollisionQueryParams(FName(TEXT("Trace")), true, pOBP);
+			int32 CurrentObstaclePieceIndex = pOBP->GetObstaclePieceIndex();
+			FVector2D CurrentObstaclePieceIndexInfo = FVector2D(CurrentObstaclePieceIndex / 4, CurrentObstaclePieceIndex % 4);
 
-			FVector Start = pOBP->GetActorLocation();
-			FVector End = pOBP->GetActorLocation().UpVector * -1 * 500; //500 임의의 레이 길이 현재 보드 조각, 장애물 조각 단위가 1m (100)라서 이거보다만 크면 감지 될듯
-			Params.bTraceAsyncScene = true;
-			//rams.bReturnPhysicalMaterial = true;
+			FVector2D ObstaclePieceInfoOffset = CurrentObstaclePieceIndexInfo - CenterObstaclePieceIndexInfo;
 
-			bool Traced = GET_MAINFRAMEWORK()->GetGameInstance()->GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
 
-			//설치하려는 장애물 조각 밑에 보드 블럭이 있다면 //여기선 무조건 있는 상황이어야 한다.
-			if (Traced)
+			int32 CurrentObstaclePieceMatchBoardIndex = UnderCursorBoardIndex + (ObstaclePieceInfoOffset.X * BOARD_X) + ObstaclePieceInfoOffset.Y;
+
+			ABoardPieceBase* pBoardPiece = _pUnderCursorBoard->GetOwnerBoard()->GetBoardPiece(CurrentObstaclePieceMatchBoardIndex);
+
+			if (pBoardPiece)
 			{
-				ABoardPieceBase* pUnderBoard = Cast<ABoardPieceBase>(Hit.GetActor());
-				if (pUnderBoard)
-				{
-					pUnderBoard->SetState(EBOARD_PIECE_STATE_TYPE::UNDER_OBSTACLE);
-				}
-			}
-			else
-			{
-				check(false); //여기로 들어오면 안됨. 밑에 감지 되는 보드 조각이 없는데 해당 함수를 타면 안된다.
+				pBoardPiece->SetState(EBOARD_PIECE_STATE_TYPE::UNDER_OBSTACLE);
 			}
 		}
 	}
@@ -349,6 +344,13 @@ void UObstacle::UpdateObstaclePieceState()
 	if (_eObstacleType == EOBSTACLE_TYPE::NONE)
 		return;
 
+	int32 UnderCursorBoardIndex = _pUnderCursorBoard->GetBoardIndex();
+	int32 CenterObstaclePieceIndex = GetCeneterPieceIndex(_eObstacleType);
+
+	//좌상단부터 우하단 순으로 장애물을 그릴 때 2차원 배열 구조체 상의 해당 조각 인덱스의 위치 인덱스 값.
+	//여기서 4는 장애물이 4x4로 이루어져있어서.
+	FVector2D CenterObstaclePieceIndexInfo = FVector2D(CenterObstaclePieceIndex / 4, CenterObstaclePieceIndex % 4);
+
 	TArray<AActor*> ObstaclePieceList;
 	_pObstacleGroupingActor->GetAttachedActors(ObstaclePieceList);
 
@@ -357,48 +359,45 @@ void UObstacle::UpdateObstaclePieceState()
 		AObstaclePieceBase* pOBP = Cast<AObstaclePieceBase>(ObstaclePieceList[i]);
 		if (pOBP)
 		{
-			FHitResult Hit(ForceInit);
-			FCollisionQueryParams Params = FCollisionQueryParams(FName(TEXT("Trace")), true, pOBP);
+			int32 CurrentObstaclePieceIndex = pOBP->GetObstaclePieceIndex();
+			FVector2D CurrentObstaclePieceIndexInfo = FVector2D(CurrentObstaclePieceIndex / 4, CurrentObstaclePieceIndex % 4);
 
-			FVector Start = pOBP->GetActorLocation();
-			FVector End = pOBP->GetActorLocation() + pOBP->GetActorLocation().UpVector * -1 * 500; //500 임의의 레이 길이 현재 보드 조각, 장애물 조각 단위가 1m (100)라서 이거보다만 크면 감지 될듯
-			//Params.bTraceAsyncScene = true;
-			//rams.bReturnPhysicalMaterial = true;
+			FVector2D ObstaclePieceInfoOffset = CurrentObstaclePieceIndexInfo - CenterObstaclePieceIndexInfo;
 
-			bool Traced = GET_MAINFRAMEWORK()->GetGameInstance()->GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
+			
+			int32 CurrentObstaclePieceMatchXBoardIndex = UnderCursorBoardIndex + (ObstaclePieceInfoOffset.X * BOARD_X);
 
-			int32 aa = pOBP->GetObstaclePieceIndex();
-			//설치하려는 장애물 조각 밑에 보드 블럭이 있다면
-			if (Traced)
+			//X 체크 //X 인덱스가 보드 최대 인덱스 보다 크거나 0보다 작으면 배치 불가다.
+			if (CurrentObstaclePieceMatchXBoardIndex >= (BOARD_X * BOARD_Y) ||
+				CurrentObstaclePieceMatchXBoardIndex < 0)
 			{
-				ABoardPieceBase* pUnderBoard = Cast<ABoardPieceBase>(Hit.GetActor());
-				int32 bb = pUnderBoard->GetBoardIndex();
-
-				if (pUnderBoard)
-				{
-					//이미 해당 보드조각이 장애물 아랫 보드조각이거나 폰(캐릭터)가 위치한 보드조각이라면
-					if (pUnderBoard->GetState() == EBOARD_PIECE_STATE_TYPE::UNDER_OBSTACLE ||
-						pUnderBoard->GetState() == EBOARD_PIECE_STATE_TYPE::UNDER_PAWN)
-					{
-						pOBP->SetState(EOBSTACLE_PIECE_STATE_TYPE::PREVIEW_FAIL);
-						UE_LOG(LogClass, Warning, TEXT("PREVIEW_FAIL 1 %d"), pOBP->GetObstaclePieceIndex());
-					}
-					else
-					{
-						pOBP->SetState(EOBSTACLE_PIECE_STATE_TYPE::PREVIEW);
-						UE_LOG(LogClass, Warning, TEXT("PREVIEW %d"), pOBP->GetObstaclePieceIndex());
-					}
-				}
-				else
-				{
-					pOBP->SetState(EOBSTACLE_PIECE_STATE_TYPE::PREVIEW_FAIL);
-					UE_LOG(LogClass, Warning, TEXT("PREVIEW_FAIL 2 %d"), pOBP->GetObstaclePieceIndex());
-				}
+				pOBP->SetState(EOBSTACLE_PIECE_STATE_TYPE::ARRANGEMENT_IMPOSSIBLE);
+			}
+			//Y 체크
+			else if (CurrentObstaclePieceMatchXBoardIndex % BOARD_X == 0 && ObstaclePieceInfoOffset.Y < 0)
+			{
+				pOBP->SetState(EOBSTACLE_PIECE_STATE_TYPE::ARRANGEMENT_IMPOSSIBLE);
+			}
+			else if (CurrentObstaclePieceMatchXBoardIndex % BOARD_X - 1 == 0 && ObstaclePieceInfoOffset.Y > 0)
+			{
+				pOBP->SetState(EOBSTACLE_PIECE_STATE_TYPE::ARRANGEMENT_IMPOSSIBLE);
 			}
 			else
 			{
-				pOBP->SetState(EOBSTACLE_PIECE_STATE_TYPE::PREVIEW_FAIL);
-				UE_LOG(LogClass, Warning, TEXT("PREVIEW_FAIL 3 %d"), pOBP->GetObstaclePieceIndex());
+				int32 CurrentObstaclePieceMatchBoardIndex = CurrentObstaclePieceMatchXBoardIndex + ObstaclePieceInfoOffset.Y;
+
+				EBOARD_PIECE_STATE_TYPE BoardPieceState;
+				if (_pUnderCursorBoard->GetOwnerBoard()->GetBoardPieceState(CurrentObstaclePieceMatchBoardIndex, BoardPieceState))
+				{
+					if(BoardPieceState == EBOARD_PIECE_STATE_TYPE::NONE)
+						pOBP->SetState(EOBSTACLE_PIECE_STATE_TYPE::PREVIEW);
+					else
+						pOBP->SetState(EOBSTACLE_PIECE_STATE_TYPE::ARRANGEMENT_IMPOSSIBLE);
+				}
+				else
+				{
+					pOBP->SetState(EOBSTACLE_PIECE_STATE_TYPE::ARRANGEMENT_IMPOSSIBLE);
+				}
 			}
 		}
 	}
@@ -418,7 +417,7 @@ bool UObstacle::IsAvailabilityArrangement()
 		AObstaclePieceBase* pOBP = Cast<AObstaclePieceBase>(ObstaclePieceList[i]);
 		if (pOBP)
 		{
-			if (pOBP->GetState() == EOBSTACLE_PIECE_STATE_TYPE::PREVIEW_FAIL) //하나의 장애물 조각이라도 배치 불가 상태라면
+			if (pOBP->GetState() == EOBSTACLE_PIECE_STATE_TYPE::ARRANGEMENT_IMPOSSIBLE) //하나의 장애물 조각이라도 배치 불가 상태라면
 				return false;
 		}
 	}

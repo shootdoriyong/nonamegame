@@ -44,7 +44,7 @@ enum class EOBSTACLE_PIECE_STATE_TYPE : uint8
 	
 	HIDDEN, //보드에 마우스가 벗어나면 Hidden 상태로 // ObstacleState가 Hidden일때 모든 종속 ObstaclePiece는 Hidden이 된다.
 	PREVIEW, //설치 전 미리보기 상태의 장애물 조각
-	PREVIEW_FAIL, //설치 전 미리보기 상태의 장애물 조각인데 해당 위치에 설치가 불가능 한 경우 일때( 해당 보드 위치에 캐릭터나 다른 장애물조각이 존재 등의 이유)
+	ARRANGEMENT_IMPOSSIBLE, //배치 전 미리보기 상태 일 때 해당 장애물 조각이 배치 불가능 시 // 배치 가능 하면 그냥 Preview 상태로 두면 된다.
 
 	ARRANGEMENT, //설치(배치) 상태
 
